@@ -101,6 +101,7 @@ container manager you provided to start a container for this model and create an
 When you deploy models and register applications, you must specify the input type that the model or application expects. The type that you specify has implications for how Clipper manages input serialization and deserialization. From the user's perspective, the input type affects the behavior of Clipper in two places. In the "input" field of the request JSON body, applications will reject requests where the value of that field is the wrong type. And the deployed model function will be called with a list of inputs of the specified type.
 
 The input type can be one of the following types:
+
 + *"ints"*: The value of the "input" field in a request must be a JSON list of ints. The model function will be called with a list of numpy arrays of type `numpy.int`.
 + *"floats"*: The value of the "input" field in a request must be a JSON list of doubles. The model function will be called with a list of numpy arrays of type `numpy.float32`.
 + *"doubles"*: The value of the "input" field in a request must be a JSON list of doubles. The model function will be called with a list of numpy arrays of type `numpy.float64`.
@@ -113,6 +114,7 @@ The input type can be one of the following types:
 Instead of automatically creating a REST endpoint when you deploy a model, Clipper introduces a layer of indirection: the application. Clients query a specific application in Clipper, and the application routes the query to the correct model. This allows multiple applications to route queries to the same model, and in the future will allow a single application to route queries to multiple models. A single Clipper cluster can have many applications registered and many models deployed at once.
 
 When you register an application you configure certain elements of the application's behavior. These include:
+
 + The name to give the REST endpoint.
 + The input type that the application expects (Clipper will ensure applications only route requests to models with matching input types).
 + The latency service level objective (SLO) specified in microseconds. Clipper will manage how it schedules and routes queries for an application based on the specified service level objective. For example, Clipper will set the amount of time it allows requests to spend queued before being sent to the model based on the service level objective for the application requesting the prediction. In addition, Clipper will respond to requests by the end of the specified SLO, even if it has not received a prediction back from the model.
